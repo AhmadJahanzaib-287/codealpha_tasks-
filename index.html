@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator Application</title>
+
+  <!-- Monospace for the readout, humanist sans for everything else -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="calculator-container">
+    <header class="calculator-header">
+      <h1 class="calculator-title">Calculator</h1>
+      <div class="header-controls">
+        <button id="history-toggle" class="icon-btn" aria-label="Toggle History" aria-expanded="false" aria-controls="history-panel">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><polyline points="12 7 12 12 15.5 14"></polyline></svg>
+        </button>
+        <div class="mode-switch-container">
+          <label class="switch-label" for="mode-toggle">Scientific</label>
+          <button id="mode-toggle" class="toggle-btn" role="switch" aria-checked="false" aria-label="Toggle Scientific Mode">
+            <span class="toggle-thumb"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <section id="history-panel" class="history-panel hidden" aria-label="Calculation History">
+      <div class="history-panel-header">
+        <span class="history-panel-title">History</span>
+        <button id="history-clear" class="history-clear-btn" aria-label="Clear History">Clear</button>
+      </div>
+      <ul id="history-list" class="history-list">
+        <li class="history-empty">No calculations yet</li>
+      </ul>
+    </section>
+
+    <section class="display-area" aria-label="Calculator Display">
+      <div id="expression-display" class="expression-display"></div>
+      <div id="preview-display" class="preview-display"></div>
+      <div id="main-display" class="main-display">0</div>
+    </section>
+
+    <section class="keypad-area" aria-label="Calculator Keypad">
+      <div id="scientific-panel" class="scientific-panel hidden">
+        <button type="button" class="btn btn-sci" data-action="angle-toggle" id="angle-toggle" aria-label="Toggle Angle Unit">DEG</button>
+        <button type="button" class="btn btn-sci" data-action="func" data-value="sin" aria-label="Sine">sin</button>
+        <button type="button" class="btn btn-sci" data-action="func" data-value="cos" aria-label="Cosine">cos</button>
+        <button type="button" class="btn btn-sci" data-action="func" data-value="tan" aria-label="Tangent">tan</button>
+
+        <button type="button" class="btn btn-sci" data-action="func" data-value="ln" aria-label="Natural Logarithm">ln</button>
+        <button type="button" class="btn btn-sci" data-action="func" data-value="log" aria-label="Logarithm Base 10">log</button>
+        <button type="button" class="btn btn-sci" data-action="func" data-value="sqrt" aria-label="Square Root">√</button>
+        <button type="button" class="btn btn-sci" data-action="operator" data-value="^" aria-label="Exponentiation">xʸ</button>
+
+        <button type="button" class="btn btn-sci" data-action="func" data-value="sqr" aria-label="Square">x²</button>
+        <button type="button" class="btn btn-sci" data-action="constant" data-value="π" aria-label="Pi">π</button>
+        <button type="button" class="btn btn-sci" data-action="constant" data-value="e" aria-label="Euler Constant">e</button>
+        <button type="button" class="btn btn-sci" data-action="action" data-value="fact" aria-label="Factorial">n!</button>
+
+        <button type="button" class="btn btn-sci" data-action="paren" data-value="(" aria-label="Open Parenthesis">(</button>
+        <button type="button" class="btn btn-sci" data-action="paren" data-value=")" aria-label="Close Parenthesis">)</button>
+      </div>
+
+      <div class="standard-panel">
+        <button type="button" class="btn btn-action" data-action="clear" aria-label="Clear All">AC</button>
+        <button type="button" class="btn btn-action" data-action="delete" aria-label="Delete">DEL</button>
+        <button type="button" class="btn btn-action" data-action="operator" data-value="%" aria-label="Modulo or Percent">%</button>
+        <button type="button" class="btn btn-operator" data-action="operator" data-value="÷" aria-label="Divide">÷</button>
+
+        <button type="button" class="btn btn-number" data-action="digit" data-value="7" aria-label="Seven">7</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="8" aria-label="Eight">8</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="9" aria-label="Nine">9</button>
+        <button type="button" class="btn btn-operator" data-action="operator" data-value="×" aria-label="Multiply">×</button>
+
+        <button type="button" class="btn btn-number" data-action="digit" data-value="4" aria-label="Four">4</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="5" aria-label="Five">5</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="6" aria-label="Six">6</button>
+        <button type="button" class="btn btn-operator" data-action="operator" data-value="−" aria-label="Subtract">−</button>
+
+        <button type="button" class="btn btn-number" data-action="digit" data-value="1" aria-label="One">1</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="2" aria-label="Two">2</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="3" aria-label="Three">3</button>
+        <button type="button" class="btn btn-operator" data-action="operator" data-value="+" aria-label="Add">+</button>
+
+        <button type="button" class="btn btn-action" data-action="negate" aria-label="Toggle Sign">±</button>
+        <button type="button" class="btn btn-number" data-action="digit" data-value="0" aria-label="Zero">0</button>
+        <button type="button" class="btn btn-number" data-action="decimal" data-value="." aria-label="Decimal Point">.</button>
+        <button type="button" class="btn btn-equals" data-action="equals" aria-label="Equals">=</button>
+      </div>
+    </section>
+
+    <footer class="calculator-footer">
+      Developed By : Ahmad Jahanzaib
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,461 @@
+/* =========================================================
+   Design tokens
+   Theme: "engineer's notepad" — warm paper card, ink text,
+   a monospaced LCD-style readout, and two accent inks
+   (rust for operators, teal for scientific functions).
+   ========================================================= */
+:root {
+  --bg-primary: #eee9dd;
+  --card-bg: #fffdf7;
+
+  --ink: #262420;
+  --ink-soft: #726b5c;
+  --ink-faint: #a49c8a;
+
+  --display-bg: #21201c;
+  --display-grid: rgba(255, 255, 255, 0.045);
+  --display-text: #f2ede1;
+  --display-sub: #8a8d86;
+  --display-accent: #d98f6a;
+
+  --btn-num-bg: #fffdf7;
+  --btn-num-text: var(--ink);
+  --btn-num-border: #e4ddca;
+  --btn-num-hover: #f7f2e4;
+
+  --btn-action-bg: #eee7d6;
+  --btn-action-text: #504a3c;
+  --btn-action-hover: #e3dac4;
+
+  --btn-op-bg: #fdf0e8;
+  --btn-op-text: #b5502f;
+  --btn-op-hover: #f9e2d4;
+
+  --btn-sci-bg: #e6efe9;
+  --btn-sci-text: #2f6f62;
+  --btn-sci-hover: #d8e8de;
+
+  --btn-equals-bg: #23324a;
+  --btn-equals-text: #f6f3ec;
+  --btn-equals-hover: #1a2537;
+
+  --shadow-card: 0 20px 40px -18px rgba(38, 36, 32, 0.28);
+  --shadow-btn: 0 1px 0 rgba(38, 36, 32, 0.04);
+  --radius-card: 20px;
+  --radius-btn: 10px;
+  --transition-speed: 0.2s;
+
+  --font-display: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  --font-ui: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-ui);
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-primary);
+  background-image: radial-gradient(var(--ink-faint) 0.6px, transparent 0.6px);
+  background-size: 22px 22px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+/* =========================================================
+   Card shell
+   ========================================================= */
+.calculator-container {
+  background: var(--card-bg);
+  width: 100%;
+  max-width: 380px;
+  border-radius: var(--radius-card);
+  border: 1px solid #e6dfcd;
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: max-width var(--transition-speed) ease;
+}
+
+.calculator-container.scientific-active {
+  max-width: 640px;
+}
+
+.calculator-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.calculator-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn {
+  appearance: none;
+  border: none;
+  background-color: var(--btn-action-bg);
+  color: var(--ink-soft);
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.icon-btn:hover {
+  background-color: var(--btn-action-hover);
+}
+
+.icon-btn[aria-expanded="true"] {
+  background-color: var(--btn-sci-bg);
+  color: var(--btn-sci-text);
+}
+
+.icon-btn:focus-visible {
+  outline: 2px solid var(--btn-sci-text);
+  outline-offset: 2px;
+}
+
+.mode-switch-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* =========================================================
+   History panel
+   ========================================================= */
+.history-panel {
+  border: 1px solid #e6dfcd;
+  border-radius: 14px;
+  background-color: #faf7ee;
+  padding: 10px 12px;
+}
+
+.history-panel.hidden {
+  display: none;
+}
+
+.history-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.history-panel-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.history-clear-btn {
+  appearance: none;
+  border: none;
+  background: none;
+  color: var(--btn-op-text);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.history-clear-btn:hover {
+  text-decoration: underline;
+}
+
+.history-list {
+  list-style: none;
+  max-height: 140px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.history-empty {
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.history-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 6px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.history-item:hover {
+  background-color: #f0ead9;
+}
+
+.history-expression {
+  font-family: var(--font-display);
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+}
+
+.history-result {
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.switch-label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.toggle-btn {
+  width: 40px;
+  height: 22px;
+  background-color: var(--btn-action-bg);
+  border-radius: 11px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  padding: 2px;
+  transition: background-color var(--transition-speed) ease;
+}
+
+.toggle-btn:focus-visible {
+  outline: 2px solid var(--btn-sci-text);
+  outline-offset: 2px;
+}
+
+.toggle-btn[aria-checked="true"] {
+  background-color: var(--btn-sci-text);
+}
+
+.toggle-thumb {
+  width: 18px;
+  height: 18px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  display: block;
+  transition: transform var(--transition-speed) ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-btn[aria-checked="true"] .toggle-thumb {
+  transform: translateX(18px);
+}
+
+/* =========================================================
+   Display — the one place we spend our "design budget":
+   a dark LCD-style readout with a faint dot grid, set in
+   a monospace face so digits don't jitter as they change.
+   ========================================================= */
+.display-area {
+  background-color: var(--display-bg);
+  background-image: radial-gradient(var(--display-grid) 0.6px, transparent 0.6px);
+  background-size: 10px 10px;
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  min-height: 88px;
+  word-break: break-all;
+}
+
+.expression-display {
+  font-family: var(--font-display);
+  font-size: 0.82rem;
+  color: var(--display-sub);
+  min-height: 1.1rem;
+  margin-bottom: 2px;
+}
+
+.preview-display {
+  font-family: var(--font-display);
+  font-size: 0.78rem;
+  color: var(--display-accent);
+  min-height: 1rem;
+  margin-bottom: 4px;
+}
+
+.main-display {
+  font-family: var(--font-display);
+  font-size: 1.9rem;
+  font-weight: 600;
+  color: var(--display-text);
+  line-height: 1.2;
+  transition: font-size 0.1s ease;
+}
+
+/* =========================================================
+   Keypad
+   ========================================================= */
+.keypad-area {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.calculator-container.scientific-active .keypad-area {
+  grid-template-columns: 1fr 1.2fr;
+}
+
+.scientific-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding-right: 12px;
+  border-right: 1px dashed #e6dfcd;
+}
+
+.scientific-panel.hidden {
+  display: none;
+}
+
+.standard-panel {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid transparent;
+  outline: none;
+  height: 46px;
+  border-radius: var(--radius-btn);
+  font-size: 1.05rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: var(--shadow-btn);
+  transition: background-color 0.15s ease, transform 0.05s ease, border-color 0.15s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn:active,
+.btn.active-key {
+  transform: scale(0.95);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--btn-sci-text);
+  outline-offset: 2px;
+}
+
+.btn-number {
+  background-color: var(--btn-num-bg);
+  border-color: var(--btn-num-border);
+  color: var(--btn-num-text);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.btn-number:hover { background-color: var(--btn-num-hover); }
+
+.btn-action {
+  background-color: var(--btn-action-bg);
+  color: var(--btn-action-text);
+}
+.btn-action:hover { background-color: var(--btn-action-hover); }
+
+.btn-operator {
+  background-color: var(--btn-op-bg);
+  color: var(--btn-op-text);
+  font-weight: 600;
+}
+.btn-operator:hover { background-color: var(--btn-op-hover); }
+
+.btn-sci {
+  background-color: var(--btn-sci-bg);
+  color: var(--btn-sci-text);
+  font-size: 0.86rem;
+  font-weight: 500;
+  height: 46px;
+}
+.btn-sci:hover { background-color: var(--btn-sci-hover); }
+
+.btn-equals {
+  background-color: var(--btn-equals-bg);
+  color: var(--btn-equals-text);
+  font-weight: 600;
+}
+.btn-equals:hover { background-color: var(--btn-equals-hover); }
+
+.calculator-footer {
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--ink-faint);
+  font-weight: 500;
+  border-top: 1px dashed #e6dfcd;
+  padding-top: 8px;
+  letter-spacing: 0.01em;
+}
+
+/* =========================================================
+   Small screens
+   ========================================================= */
+@media (max-width: 600px) {
+  body {
+    padding: 8px;
+  }
+
+  .calculator-container,
+  .calculator-container.scientific-active {
+    max-width: 100%;
+    padding: 14px;
+    gap: 10px;
+  }
+
+  .calculator-container.scientific-active .keypad-area {
+    grid-template-columns: 1fr;
+  }
+
+  .scientific-panel {
+    border-right: none;
+    border-bottom: 1px dashed #e6dfcd;
+    padding-right: 0;
+    padding-bottom: 8px;
+  }
+
+  .btn {
+    height: 42px;
+    font-size: 0.95rem;
+  }
+
+  .btn-sci {
+    height: 38px;
+    font-size: 0.8rem;
+  }
+
+  .history-list {
+    max-height: 110px;
+  }
+}
